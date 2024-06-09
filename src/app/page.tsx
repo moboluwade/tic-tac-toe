@@ -14,7 +14,7 @@ export default function Home() {
 
       {/* LeaderBoard and Auth */}
       <section className="h-full w-full flex flex-row justify-center items-center ">
-        <nav className="bg-[#1e1e1e] border-2 border-[rgba(243,73,84,0.6)] md:w-96 w-fit h-[28rem] px-4 rounded-lg flex flex-col justify-start items-center">
+        <nav className="bg-[#1e1e1e]  md:w-96 w-fit h-[28rem] px-4 rounded-lg flex flex-col justify-start items-center">
           <div className=" py-4 flex flex-col items-center h-full justify-around">
             {/* LeaderBoard */}
             <div className="flex flex-col items-center h-full">
