@@ -1,8 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import Header from "./components/Header";
+import { signIn, auth } from "./auth";
+import { ReactNode } from "react";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth()
+
   return (
     <div className="flex flex-row h-screen w-full items-center relative">
 
@@ -26,7 +30,31 @@ export default function Home() {
 
             {/* Requires authentication */}
             <div className="flex flex-col items-center gap-4 pb-4">
-              <button className="bg-white text-black rounded-full w-full h-12 px-4 font-semibold tracking-wide">Play MultiPlayer</button>
+              {/* quick proof of authentication */}
+              <div className="pb-4">
+
+                {
+                  !!session?.user ? (
+                    <div className="flex flex-row gap-4 justify-center items-center">
+                      <Image className="rounded-full w-8 h-8" src={session?.user?.image ?? ""} width={15} height={15} alt="profile" />
+                      <div>{session.user?.name}</div>
+                    </div>
+                  )
+                    :
+                    (
+                      <form action={
+                        async () => {
+                          "use server"
+                          await signIn("google")
+                        }
+                      }>
+                        <button type="submit" className="bg-white text-black rounded-full w-full h-12 px-4 font-semibold tracking-wide">Sign in</button>
+                      </form>
+                    )
+                }
+              </div>
+
+              <button type="submit" className="bg-white text-black rounded-full w-full h-12 px-4 font-semibold tracking-wide">Play MultiPlayer</button>
               <button className="font-semibold tracking-wide">SinglePlayer</button>
             </div>
           </div>
