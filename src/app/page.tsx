@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import Header from "./components/Header";
-import { signIn, auth } from "./auth";
+import { signIn, auth, signOut } from "./auth";
 import { ReactNode } from "react";
-
+import Button from "./components/homepage/Button"
 export default async function Home() {
   const session = await auth()
+
+
 
   return (
     <div className="flex flex-row h-screen w-full items-center relative">
@@ -38,6 +40,15 @@ export default async function Home() {
                     <div className="flex flex-row gap-4 justify-center items-center">
                       <Image className="rounded-full w-8 h-8" src={session?.user?.image ?? ""} width={15} height={15} alt="profile" />
                       <div>{session.user?.name}</div>
+                      <form action={
+                        async () => {
+                          "use server"
+                          await signOut()
+                          await console.log('logged out')
+                        }
+                      }>
+                        <button type="submit">{"<-"}</button>
+                      </form>
                     </div>
                   )
                     :
@@ -53,9 +64,8 @@ export default async function Home() {
                     )
                 }
               </div>
-
-              <button type="submit" className="bg-white text-black rounded-full w-full h-12 px-4 font-semibold tracking-wide">Play MultiPlayer</button>
-              <button className="font-semibold tracking-wide">SinglePlayer</button>
+              <Button session={session}></Button>
+              <Button type={"singleplayer"} session={session}></Button>
             </div>
           </div>
         </nav>
