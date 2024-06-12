@@ -61,18 +61,13 @@ import TicTacToe from '../components/tic-tac-toe/TicTacToe';
 // }
 
 const page = () => {
-  const board = [
-    ['O', 'O', 'X'],
-    ['O', 'X', 'O'],
-    [null, 'X', 'X']
-  ]
 
   return (
     <div className='flex flex-col items-center relative'>
       <h1 className='text-xl'>Tic-Tac-Toe</h1>
 
-      {checkWin(board)}
-      {checkWin(board) === null && "no winner"}
+      {/* {checkWin(board)}
+      {checkWin(board) === null && "no winner"} */}
       <section className='relative'>
         <TicTacToe />
       </section>
