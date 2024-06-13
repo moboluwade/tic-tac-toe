@@ -1,8 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Image from 'next/image';
+
+const GamePieceCross = () => {
+    return (
+        <Image src="/game-cross.svg" width={60} height={60} alt="X" />
+    );
+}
+
+const GamePieceDot = () => {
+    return (
+        <Image src="/game-dot.svg" width={80} height={80} alt="O" />
+    );
+}
 
 const GameBoard = () => {
+    const [winner, setWinner] = useState<null | string>(null)
+    const [turnCount, setTurnCount] = useState<number>(0);
     const [board, setBoard] = useState<(null | string)[][]>([
         [null, null, null],
         [null, null, null],
@@ -27,49 +42,137 @@ const GameBoard = () => {
             [null, null, null],
             [null, null, null]
         ]);
+        setTurnCount(0);
+        setWinner(null);
     };
 
+    const handleButtonClick = (rowIndex: number, colIndex: number) => {
+        if (board[rowIndex][colIndex] === null) {
+            setBoard(prevBoard => {
+                const newBoard = prevBoard.map((row, rIndex) =>
+                    row.map((cell, cIndex) =>
+                        rIndex === rowIndex && cIndex === colIndex ? (turnCount % 2 === 0 ? 'X' : 'O') : cell
+                    )
+                );
+                return newBoard;
+            });
+            setTurnCount(prevTurnCount => prevTurnCount + 1);
+        }
+    };
+
+    const renderGamePiece = (rowIndex: number, colIndex: number) => {
+        const value = board[rowIndex][colIndex];
+        if (value === 'X') {
+            return <GamePieceCross />;
+        } else if (value === 'O') {
+            return <GamePieceDot />;
+        } else {
+            return null;
+        }
+    };
+
+
+
+    useEffect(() => {
+        //turn logic, at the stat of the game start counting turns
+
+
+        // needs testing
+        const checkWin = (board: (string | null)[][]) => {
+            const size = board.length;
+            let rowCheck, colCheck, mainDiagonalCheck = true, antiDiagonalCheck = true;
+
+            for (let i = 0; i < size; i++) {
+                rowCheck = true;
+                colCheck = true;
+
+                for (let j = 0; j < size; j++) {
+                    // Check row
+                    if (board[i][j] === null || board[i][j] !== board[i][0]) {
+                        rowCheck = false;
+                    }
+
+                    // Check column
+                    if (board[j][i] === null || board[j][i] !== board[0][i]) {
+                        colCheck = false;
+                    }
+                }
+
+                // If a row is consistent and not null, return the winner
+                if (rowCheck && board[i][0] !== null) {
+                    return board[i][0];
+                }
+
+                // If a column is consistent and not null, return the winner
+                if (colCheck && board[0][i] !== null) {
+                    return board[0][i];
+                }
+
+                // Check main diagonal
+                if (board[i][i] === null || board[i][i] !== board[0][0]) {
+                    mainDiagonalCheck = false;
+                }
+
+                // Check anti-diagonal
+                if (board[i][size - 1 - i] === null || board[i][size - 1 - i] !== board[0][size - 1]) {
+                    antiDiagonalCheck = false;
+                }
+            }
+
+            // Check if any of the diagonals have consistent values
+            if (mainDiagonalCheck && board[0][0] !== null) {
+                return board[0][0];
+            }
+
+            if (antiDiagonalCheck && board[0][size - 1] !== null) {
+                return board[0][size - 1];
+            }
+
+            // No winner found
+            return null;
+
+        }
+
+        turnCount > 4 && console.log(checkWin(board), setWinner(checkWin(board)))
+    }, [turnCount, board])
     return (
-        <div className='w-full h-full relative rounded-md'>
+        <div className={`w-full h-full relative rounded-md flex flex-col justify-start items-center `}>
+            {/* winner chicken dinner banner */}
+            <div className="absolute">
 
-            <div className='start-row'>
-                <div className='w-28 h-28 bg-black absolute z-10 rounded-none rounded-tl-md flex flex-row justify-center items-center'>
-                    <span>1</span>
-                </div>
-                <div className='w-28 h-28 bg-black absolute z-10 left-28 flex flex-row justify-center items-center'>
-                    <span>2</span>
-                </div>
-                <div className='w-28 h-28 bg-black absolute z-10 left-56 rounded-none rounded-tr-md flex flex-row justify-center items-center'>
-                    <span>3</span>
-                </div>
+                {/* {checkWin(board)}
+            {checkWin(board) === null && "no winner"} */}
             </div>
+            <div>
+                {board.map((row, rowIndex) => (
+                    <div key={rowIndex} className={`flex ${winner !== null && 'opacity-50'}`}>
+                        {row.map((cell, colIndex) => {
+                            // Define additional class names for specific button positions
+                            const additionalClassName =
+                                (rowIndex === 0 && colIndex === 0) ? 'rounded-tl-md' :
+                                    (rowIndex === 0 && colIndex === 2) ? 'rounded-tr-md' :
+                                        (rowIndex === 2 && colIndex === 0) ? 'rounded-bl-md' :
+                                            (rowIndex === 2 && colIndex === 2) ? 'rounded-br-md' : '';
 
-            <div className='middle-row absolute top-28'>
-                <div className='w-28 h-28 bg-black absolute z-10 flex flex-row justify-center items-center'>
-                    <span>4</span>
-                </div>
-                <div className='w-28 h-28 bg-black absolute z-10 left-28 flex flex-row justify-center items-center '>
-                    <span>5</span>
-                </div>
-                <div className='w-28 h-28 bg-black absolute z-10 left-56 flex flex-row justify-center items-center '>
-                    <span>6</span>
-                </div>
+                            return (
+                                <button
+                                    disabled={winner !== null}
+                                    key={colIndex}
+                                    onClick={() => handleButtonClick(rowIndex, colIndex)}
+                                    className={`w-28 h-28 bg-black z-10 flex justify-center items-center ${additionalClassName} `}
+                                >
+                                    {renderGamePiece(rowIndex, colIndex)}
+                                </button>
+                            );
+                        })}
+                    </div>
+                ))}
             </div>
-
-            <div className='middle-row absolute top-56'>
-                <div className='w-28 h-28 bg-black absolute z-10 rounded-none rounded-bl-md flex flex-row justify-center items-center'>
-                    <span>7</span>
-                </div>
-                <div className='w-28 h-28 bg-black absolute z-10 left-28  flex flex-row justify-center items-center'>
-                    <span>8</span>
-                </div>
-                <div className='w-28 h-28 bg-black absolute z-10 left-56 rounded-none rounded-br-md flex flex-row justify-center items-center'>
-                    <span>9</span>
-                </div>
+            <div className="w-full flex flex-row justify-start">
+                <button onClick={resetBoard} className="mt-4 p-2 bg-red-500 text-white rounded">Reset Board</button>
             </div>
-
         </div>
-    )
+    );
 }
 
-export default GameBoard
+export default GameBoard;
