@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Multiplayer from "./gameMode/Multiplayer";
 import Image from "next/image";
+import Singleplayer from "./gameMode/Singleplayer";
 
 const GamePieceCross: React.FC = () => {
     return (
@@ -16,6 +17,7 @@ const GamePieceDot: React.FC = () => {
 }
 
 const GameBoard = () => {
+    const [gameMode, setGameMode] = useState<null | string>(null)
     const [board, setBoard] = useState<(null | string)[][]>([
         [null, null, null],
         [null, null, null],
@@ -24,7 +26,8 @@ const GameBoard = () => {
 
     return (
         <div>
-            <Multiplayer board={board} setBoard={setBoard} GamePieceCross={GamePieceCross} GamePieceDot={GamePieceDot}/>
+            {gameMode === 'singleplayer' && < Singleplayer board={board} setBoard={setBoard} GamePieceCross={GamePieceCross} GamePieceDot={GamePieceDot} />}
+            {gameMode === 'multiplayer' && < Multiplayer board={board} setBoard={setBoard} GamePieceCross={GamePieceCross} GamePieceDot={GamePieceDot} />}
         </div>
     )
 }

@@ -1,8 +1,6 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import Image from 'next/image';
-
 
 interface MultiplayerProps {
     board: (string | null)[][];
