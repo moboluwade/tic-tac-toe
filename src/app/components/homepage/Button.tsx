@@ -29,7 +29,7 @@ const Button: React.FC<ButtonProps> = ({ type, session }) => {
         <button
             type="submit"
             className="bg-white text-black rounded-full w-full h-12 px-4 font-semibold tracking-wide"
-            onClick={() => { handleClick('/multiplayer') }}
+            onClick={() => { handleClick('/tic-tac-toe/multiplayer') }}
         >Play MultiPlayer</button>
     )
 }
