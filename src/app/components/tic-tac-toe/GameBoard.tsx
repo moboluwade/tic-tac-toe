@@ -1,8 +1,12 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Multiplayer from "./gameMode/Multiplayer";
 import Image from "next/image";
 import Singleplayer from "./gameMode/Singleplayer";
+
+interface Props {
+    mode: string;
+}
 
 const GamePieceCross: React.FC = () => {
     return (
@@ -16,14 +20,17 @@ const GamePieceDot: React.FC = () => {
     );
 }
 
-const GameBoard = () => {
-    const [gameMode, setGameMode] = useState<null | string>(null)
+const GameBoard: React.FC<Props> = ({ mode }) => {
+    const [gameMode, setGameMode] = useState<null | string>(mode ?? '')
     const [board, setBoard] = useState<(null | string)[][]>([
         [null, null, null],
         [null, null, null],
         [null, null, null]
     ]);
 
+    useEffect(() => {
+        console.log(gameMode);
+    },[gameMode])
     return (
         <div>
             {gameMode === 'singleplayer' && < Singleplayer board={board} setBoard={setBoard} GamePieceCross={GamePieceCross} GamePieceDot={GamePieceDot} />}
