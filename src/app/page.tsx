@@ -8,7 +8,6 @@ export default async function Home() {
   const session = await auth()
 
 
-
   return (
     <div className="flex flex-row h-screen w-full items-center relative">
 
@@ -17,7 +16,7 @@ export default async function Home() {
         <span className="text-lg">Find out who is better at the game amongst your friends on the global leaderboard.</span>
         <span className="text-lg">Or slug it out with the computer if you&apos;re bored.</span>
       </main>
-
+      
       {/* LeaderBoard and Auth */}
       <section className="h-full w-full flex flex-row justify-center items-center ">
         <nav className="bg-[#1e1e1e]  md:w-96 w-fit h-[28rem] px-4 rounded-lg flex flex-col justify-start items-center">
