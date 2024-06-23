@@ -1,20 +1,19 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import GameMode from "../GameBoard";
 
 interface SinglePlayerProps {
-    board: (string | null)[][];
-    setBoard: Dispatch<SetStateAction<(string | null)[][]>>;
-    GamePieceCross: React.FC;
-    GamePieceDot: React.FC;
+    board: ('X' | 'O' | null)[][];
+    setBoard: Dispatch<SetStateAction<('X' | 'O' | null)[][]>>;
 }
 
-const SinglePlayer: React.FC<SinglePlayerProps> = ({ board, setBoard, GamePieceCross, GamePieceDot }) => {
+const SinglePlayer: React.FC<SinglePlayerProps> = ({ board, setBoard}) => {
     const [winner, setWinner] = useState<null | string>(null);
     const [turnCount, setTurnCount] = useState<number>(0);
     const epsilon = 0.1; // Probability of making a random move
 
-    const updatePosition = (row: number, col: number, value: string | null) => {
+    const updatePosition = (row: number, col: number, value: 'X' | 'O' | null) => {
         // fills up the coordinates (row, col) provided and returns a new board object
         if (row >= 0 && row < board.length && col >= 0 && col < board[0].length) {
             const updatedBoard = [...board];
@@ -51,17 +50,7 @@ const SinglePlayer: React.FC<SinglePlayerProps> = ({ board, setBoard, GamePieceC
         }
     };
 
-    const renderGamePiece = (rowIndex: number, colIndex: number) => {
-        // this function renders a game piece based on the value of each provided coordinate
-        const value = board[rowIndex][colIndex];
-        if (value === 'X') {
-            return <GamePieceCross />;
-        } else if (value === 'O') {
-            return <GamePieceDot />;
-        } else {
-            return null;
-        }
-    };
+
 
     useEffect(() => {
         const checkWin = (board: (string | null)[][]) => {
@@ -272,30 +261,7 @@ const SinglePlayer: React.FC<SinglePlayerProps> = ({ board, setBoard, GamePieceC
                 {winner && `${winner} wins!`}
                 {!winner && turnCount === 9 && "It's a draw!"}
             </div>
-            <div>
-                {board.map((row, rowIndex) => (
-                    <div key={rowIndex} className={`flex ${winner !== null && 'opacity-50'}`}>
-                        {row.map((cell, colIndex) => {
-                            const additionalClassName =
-                                (rowIndex === 0 && colIndex === 0) ? 'rounded-tl-md' :
-                                    (rowIndex === 0 && colIndex === 2) ? 'rounded-tr-md' :
-                                        (rowIndex === 2 && colIndex === 0) ? 'rounded-bl-md' :
-                                            (rowIndex === 2 && colIndex === 2) ? 'rounded-br-md' : '';
-
-                            return (
-                                <button
-                                    disabled={winner !== null || board[rowIndex][colIndex] !== null}
-                                    key={colIndex}
-                                    onClick={() => handleButtonClick(rowIndex, colIndex)}
-                                    className={`w-28 h-28 bg-black z-10 flex justify-center items-center ${additionalClassName} `}
-                                >
-                                    {renderGamePiece(rowIndex, colIndex)}
-                                </button>
-                            );
-                        })}
-                    </div>
-                ))}
-            </div>
+            <GameMode board={board} winner={winner} handleButtonClick={handleButtonClick} />
             <div className="w-full flex flex-row justify-start">
                 <button onClick={resetBoard} className="mt-4 p-2 bg-red-500 text-white rounded">Reset Board</button>
             </div>
