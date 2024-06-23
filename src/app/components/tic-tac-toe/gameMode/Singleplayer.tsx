@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import GameMode from "../GameBoard";
+import GameBoard from "../GameBoard";
 
 interface SinglePlayerProps {
     board: ('X' | 'O' | null)[][];
@@ -261,7 +261,7 @@ const SinglePlayer: React.FC<SinglePlayerProps> = ({ board, setBoard}) => {
                 {winner && `${winner} wins!`}
                 {!winner && turnCount === 9 && "It's a draw!"}
             </div>
-            <GameMode board={board} winner={winner} handleButtonClick={handleButtonClick} />
+            <GameBoard board={board} winner={winner} handleButtonClick={handleButtonClick} />
             <div className="w-full flex flex-row justify-start">
                 <button onClick={resetBoard} className="mt-4 p-2 bg-red-500 text-white rounded">Reset Board</button>
             </div>

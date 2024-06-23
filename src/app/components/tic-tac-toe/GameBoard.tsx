@@ -12,16 +12,24 @@ interface Props {
     handleButtonClick: (rowIndex: number, colIndex: number) => void;
     // renderGamePiece: RenderGamePieceType;
 }
-const GameMode: React.FC<Props> = ({ board, winner, handleButtonClick }) => {
+const GameBoard: React.FC<Props> = ({ board, winner, handleButtonClick }) => {
 
     const renderGamePiece = (rowIndex: number, colIndex: number) => {
         // this function renders a game piece based on the value of each provided coordinate
         const value = board[rowIndex]?.[colIndex];
         console.log(value)
         if (value === 'X') {
-            return <GamePieceCross />;
+            return (
+                <div className='w-[30px] h-[30px] md:w-[60px] md:h-[60px]'>
+                    <GamePieceCross />
+                </div>
+            )
         } else if (value === 'O') {
-            return <GamePieceDot />;
+            return (
+                <div className='w-[40px] h-[40px] md:w-[80px] md:h-[80px]'>
+                    <GamePieceDot />
+                </div>
+            )
         } else {
             return null;
         }
@@ -54,7 +62,7 @@ const GameMode: React.FC<Props> = ({ board, winner, handleButtonClick }) => {
                                 disabled={winner !== null || board[rowIndex][colIndex] !== null}
                                 key={colIndex}
                                 onClick={() => handleButtonClick(rowIndex, colIndex)}
-                                className={`w-28 h-28 bg-black z-10 flex justify-center items-center ${additionalClassName} `}
+                                className={`md:w-28 md:h-28 w-16 h-16 bg-black z-10 flex justify-center items-center ${additionalClassName} `}
                             >
                                 {renderGamePiece(rowIndex, colIndex)}
                             </button>
@@ -66,4 +74,4 @@ const GameMode: React.FC<Props> = ({ board, winner, handleButtonClick }) => {
     )
 }
 
-export default GameMode
+export default GameBoard

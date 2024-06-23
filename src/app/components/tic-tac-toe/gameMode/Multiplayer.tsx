@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import GameMode from "../GameBoard";
+import GameBoard from "../GameBoard";
 
 interface MultiplayerProps {
     board: ('X' | 'O' | null)[][];
@@ -119,7 +119,7 @@ const Multiplayer: React.FC<MultiplayerProps> = ({ board, setBoard }) => {
                 {/* {checkWin(board)}
             {checkWin(board) === null && "no winner"} */}
             </div>
-            <GameMode board={board} winner={winner} handleButtonClick={handleButtonClick} />
+            <GameBoard board={board} winner={winner} handleButtonClick={handleButtonClick} />
             <div className="w-full flex flex-row justify-start">
                 <button onClick={resetBoard} className="mt-4 p-2 bg-red-500 text-white rounded">Reset Board</button>
             </div>
